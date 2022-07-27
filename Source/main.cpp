@@ -25,7 +25,8 @@ void processRealtimeInput(GLFWwindow* window, float deltaTime);
 Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 
 // Mouse
-GLfloat lastX = 400, lastY = 300;
+float lastX = 400;
+float lastY = 300;
 bool firstMouse = true;
 bool isMouseCapturedInWindow = false;
 bool UIwantsToCaptureMouseInput = true;
@@ -39,49 +40,49 @@ GLfloat ASPECT = float(WIDTH) / float(HEIGHT);
 // cloud model
 float coverageScale = 0.45f;
 float ambientColorScale = 0.7f; 
-float cloudType = 0.8;
-float lowFrequencyNoiseScale = 0.3;
+float cloudType = 0.8f;
+float lowFrequencyNoiseScale = 0.3f;
 bool ignoreDetailNoise = false;
 float highFrequencyNoiseScale = 0.3f;
-float highFrequencyNoiseErodeMuliplier = 0.19;
-float highFrequencyHeightTransitionMultiplier = 10;
-float anvilBias = 0.1;
+float highFrequencyNoiseErodeMuliplier = 0.19f;
+float highFrequencyHeightTransitionMultiplier = 10.0f;
+float anvilBias = 0.1f;
 // cloud lighting
 glm::vec3 cloudColor = glm::vec3(1.0f, 1.0f, 1.0f);
 float rainCloudAbsorptionGain = 2.3f;
 float cloudAttenuationScale = 2.5f;
-float phaseEccentricity = 0.5;
-float phaseSilverLiningIntensity = 0.15;
-float phaseSilverLiningSpread = 0.5;
-float coneSpreadMultplier = 0.2;
-float shadowSampleConeSpreadMultiplier = 0.6;
-float powderedSugarEffectMultiplier = 10.0;
-float toneMapperEyeExposure = 0.8;
+float phaseEccentricity = 0.5f;
+float phaseSilverLiningIntensity = 0.15f;
+float phaseSilverLiningSpread = 0.5f;
+float coneSpreadMultplier = 0.2f;
+float shadowSampleConeSpreadMultiplier = 0.6f;
+float powderedSugarEffectMultiplier = 10.0f;
+float toneMapperEyeExposure = 0.8f;
 // raymarch
-float maxRenderDistance = 150000;
-float maxHorizontalSampleCount = 192;
-float maxVerticalSampleCount = 128;
+float maxRenderDistance = 150000.0f;
+float maxHorizontalSampleCount = 192.0f;
+float maxVerticalSampleCount = 128.0f;
 bool useEarlyExitAtFullOpacity = true;
 bool useBayerFilter = true;
-float earthRadius = 600000.0; 			        
-float volumetricCloudsStartRadius = 607000.0;
-float volumetricCloudsEndRadius = 633000.0;
+float earthRadius = 600000.0f; 			        
+float volumetricCloudsStartRadius = 607000.0f;
+float volumetricCloudsEndRadius = 633000.0f;
 bool renderDirectlyToFullscreen = false;
 bool renderActualQuarterResolutionBuffer = false;
 // windsettings
 glm::vec3 windDirection = glm::vec3(1.0f, 0.0f, 0.0f);
-float windUpwardBias = 0.15;	
-float cloudSpeed = 300.0;
-float cloudTopOffset = 500;		
+float windUpwardBias = 0.15f;	
+float cloudSpeed = 300.0f;
+float cloudTopOffset = 500.0f;		
 // sun settings
-float sunIntensity = 0.4;
+float sunIntensity = 0.4f;
 bool moveSunManually = true;
-float sunPitch = 90;
+float sunPitch = 90.0f;
 // debug 
 bool debugBool = false;
 float debugFloat = 0.4f;
 float debugFloat2 = 0.7f;
-float debugFloat3 = 1.0;
+float debugFloat3 = 1.0f;
 
 // ===================================================================================================================================================================
 
@@ -367,7 +368,7 @@ int main()
     while (!glfwWindowShouldClose(window))
     {
         // Frame Time
-        GLfloat currentFrameTime = glfwGetTime();
+        float currentFrameTime = (float) glfwGetTime();
         deltaTime = currentFrameTime - lastFrameTime;
         lastFrameTime = currentFrameTime;
 
@@ -468,15 +469,15 @@ int main()
         glUniform1f(uSunIntensity, sunIntensity);
         if (moveSunManually) {
             float sunPitchRadians = glm::radians(sunPitch);
-            constexpr float yaw = glm::radians(90.0);
+            constexpr float yaw = (float) glm::radians(90.0);
             float sunposx = cos(yaw) * cos(sunPitchRadians);
             float sunposy = sin(sunPitchRadians);
             float sunposz = sin(yaw) * cos(sunPitchRadians);
             glUniform3f(uSunPosition, float(sunposx), float(sunposy), float(sunposz));
         }
         else {
-            float pitch = glm::radians(180.0 * ((sin(currentFrameTime * 0.05) + 1.0) * 0.5));
-            constexpr float yaw = glm::radians(90.0);
+            float pitch = (float) glm::radians(180.0 * ((sin(currentFrameTime * 0.05) + 1.0) * 0.5));
+            constexpr float yaw = (float) glm::radians(90.0);
             float sunposx = cos(yaw) * cos(pitch);
             float sunposy = sin(pitch);
             float sunposz = sin(yaw) * cos(pitch);
@@ -650,16 +651,16 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos)
 {
     if (firstMouse || !isMouseCapturedInWindow)
     {
-        lastX = xpos;
-        lastY = ypos;
+        lastX = (float) xpos;
+        lastY = (float) ypos;
         firstMouse = false;
     }
 
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;  // Reversed since y-coordinates go from bottom to left
+    float xoffset = (float) (xpos - lastX);
+    float yoffset = (float) (lastY - ypos);  // Reversed since y-coordinates go from bottom to left
 
-    lastX = xpos;
-    lastY = ypos;
+    lastX = (float) xpos;
+    lastY = (float) ypos;
 
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
