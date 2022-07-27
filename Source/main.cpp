@@ -15,6 +15,7 @@
 
 #include <iostream>
 
+void windowResizeCallback(GLFWwindow* window, int width, int height);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void mouseCallback(GLFWwindow* window, double xpos, double ypos);
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
@@ -103,11 +104,11 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Realtime Volumetric Clouds", NULL, NULL);
     glfwMakeContextCurrent(window);
 
+    glfwSetFramebufferSizeCallback(window, windowResizeCallback);
     glfwSetCursorPosCallback(window, mouseCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
@@ -629,6 +630,12 @@ int main()
     glDeleteTextures(1, &worltex);
     glfwTerminate();
     return 0;
+}
+
+void windowResizeCallback(GLFWwindow* window, int width, int height)
+{
+    glfwSetWindowSize(window, width, height);
+    glViewport(0, 0, width, height);
 }
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
