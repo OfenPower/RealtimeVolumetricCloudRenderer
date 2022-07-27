@@ -19,7 +19,7 @@ This volumetric clouds implementation is based on Andrew Schneiders article "Rea
 
 ### ImGUI UI Settings Window
 
-![Raymarch Settings](./Screenshots/ImGUI_RaymarchSettings.PNG?raw=true)
+![Raymarch Settings](./Screenshots/ImGUI_Settings.PNG?raw=true)
 
 
 
