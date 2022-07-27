@@ -1376,4 +1376,9 @@
     <Library Include="lib\release\glfw3.lib" />
     <Library Include="lib\debug\glfw3.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Screenshots\ImGUI_RaymarchSettings.PNG">
+      <Filter>Ressourcendateien</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

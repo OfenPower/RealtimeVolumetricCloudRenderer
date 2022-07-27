@@ -620,6 +620,9 @@
     <Library Include="lib\debug\glfw3.lib" />
     <Library Include="lib\release\glfw3.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Screenshots\ImGUI_RaymarchSettings.PNG" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
