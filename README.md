@@ -13,6 +13,10 @@ and special thanks to the volumetric cloud projects from
 This is a demo application which renders volumetric clouds in realtime through raymarching, combined with the preetham atmospheric scattering model, a free flight camera in order to fly through the clouds and an ImGUI UI Interface to control the rendering process. It is a simple, well commented and barebones project with all dependencies included which aims to demonstrate this specific volumetric cloud rendering technique to those interested. Just download the project and run the .exe file in the /bin folder to start the demo.
 
 This volumetric clouds implementation is based on Andrew Schneiders article "Real-Time Volumetric Cloudscapes" from the book GPU Pro 7: Advanced Rendering Techniques (2016) and his follow-up presentations (see the above resource list for links). 
+However, two components from the article are not used in this implementation:
+
+1. Frame-reprojection. Reason being, that it is not that easy to implement (sorry for that :(, but the other projects above have implementations for it. Instead of frame-reprojection, a simple upscale-shader is used (thanks to clayjohns project for that), which takes a pixel color from the quarter-resolution cloud colorbuffer and assigns that same color to a 4x4 pixel block in the fullscreen main colorbuffer. This results in a little blurring, but it works very well for this demo (see the screenshots below).
+2. A weathermap texture. Instead, a cloudType float value determines the current cloud type (ranging from stratus to cumulus) and a cloudCoverage float value determines the cloud coverage of the whole sky. This makes it easier to understand and easier to play around with those values through the UI settings.  
 
 
 # Screenshots
