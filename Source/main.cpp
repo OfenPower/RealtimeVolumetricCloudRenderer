@@ -58,8 +58,8 @@ float powderedSugarEffectMultiplier = 10.0;
 float toneMapperEyeExposure = 0.8;
 // raymarch
 float maxRenderDistance = 150000;
-float maxHorizontalSampleCount = 128;
-float maxVerticalSampleCount = 64;
+float maxHorizontalSampleCount = 192;
+float maxVerticalSampleCount = 128;
 bool useEarlyExitAtFullOpacity = true;
 bool useBayerFilter = true;
 float earthRadius = 600000.0; 			        
