@@ -8,6 +8,8 @@ and special thanks to the volumetric cloud projects from
 - clayjohn: https://github.com/clayjohn/realtime_clouds
 - fede-vaccaro: https://github.com/fede-vaccaro/TerrainEngine-OpenGL
 
+If you are interested in the topic of realtime volumetric cloud rendering, checkout all the resources from above in addition to this project, in order to get a complete picture.
+
 # OpenGL Realtime Volumetric Cloud Renderer
 
 This is a demo application which renders volumetric clouds in realtime through raymarching, combined with the preetham atmospheric scattering model, a free flight camera in order to fly through the clouds and an ImGUI UI Interface to control the rendering process. It is a simple, well commented and barebones project with all dependencies included which aims to demonstrate this specific volumetric cloud rendering technique to those interested. Just download the project and run the .exe file in the /bin folder to start the demo.
