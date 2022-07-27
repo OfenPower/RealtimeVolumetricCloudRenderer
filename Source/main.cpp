@@ -111,7 +111,6 @@ int main()
     glfwSetCursorPosCallback(window, mouseCallback);
     glfwSetKeyCallback(window, keyCallback);
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
-    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     //glfwSetWindowPos(window, 700, 50);
     glfwSwapInterval(0);    //turn off vsync
