@@ -170,6 +170,7 @@
     <ClInclude Include="Source\glad\glad.h" />
     <ClInclude Include="Source\glad\khrplatform.h" />
     <ClInclude Include="Source\glfw\glfw3.h" />
+    <ClInclude Include="Source\glfw\glfw3native.h" />
     <ClInclude Include="Source\glm\common.hpp" />
     <ClInclude Include="Source\glm\detail\compute_common.hpp" />
     <ClInclude Include="Source\glm\detail\compute_vector_relational.hpp" />
@@ -614,6 +615,10 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\glm\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\debug\glfw3.lib" />
+    <Library Include="lib\release\glfw3.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

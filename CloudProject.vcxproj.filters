@@ -944,6 +944,9 @@
     <ClInclude Include="Source\glm\vector_relational.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="Source\glfw\glfw3native.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\upscale.vert" />
@@ -1368,5 +1371,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\glm\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\release\glfw3.lib" />
+    <Library Include="lib\debug\glfw3.lib" />
   </ItemGroup>
 </Project>
