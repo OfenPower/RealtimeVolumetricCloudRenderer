@@ -51,6 +51,18 @@
     <ClCompile Include="Source\glm\detail\glm.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Application.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\mainbackup.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\InputHandler.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VolumetricCloudAtmosphereRenderer.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Shader.h">
@@ -945,6 +957,15 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Source\glfw\glfw3native.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Application.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\InputHandler.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VolumetricCloudAtmosphereRenderer.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

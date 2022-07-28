@@ -151,6 +151,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\InputHandler.cpp" />
+    <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\glad\glad.c" />
     <ClCompile Include="Source\glm\detail\glm.cpp" />
@@ -162,9 +164,13 @@
     <ClCompile Include="Source\ImGui\imgui_tables.cpp" />
     <ClCompile Include="Source\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\mainbackup.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
+    <ClCompile Include="Source\VolumetricCloudAtmosphereRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\InputHandler.h" />
+    <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\ComputeShader.h" />
     <ClInclude Include="Source\glad\glad.h" />
@@ -463,6 +469,7 @@
     <ClInclude Include="Source\ImGui\imstb_textedit.h" />
     <ClInclude Include="Source\ImGui\imstb_truetype.h" />
     <ClInclude Include="Source\Shader.h" />
+    <ClInclude Include="Source\VolumetricCloudAtmosphereRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
