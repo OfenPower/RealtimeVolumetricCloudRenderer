@@ -36,6 +36,9 @@ int main()
 	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetMouseButtonCallback(window, MouseButtonCallback);
 
+	// start rendering loop
+	application->Run();
+
 	// cleanup
 	glfwTerminate();
 	delete application;

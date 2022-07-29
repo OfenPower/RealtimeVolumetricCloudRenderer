@@ -41,6 +41,9 @@ void Application::Initialize(const int screenWidth, const int screenHeight, cons
 
     // initialize viewport
     glViewport(0, 0, windowWidth, windowHeight);
+
+    // initialize renderer and input handler
+    volumetricCloudAtmoshpereRenderer.Initialize(this);
 }
 
 void Application::Run()

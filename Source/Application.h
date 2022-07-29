@@ -3,6 +3,8 @@
 #include "InputHandler.h"
 #include "VolumetricCloudAtmosphereRenderer.h"
 
+#include "glfw/glfw3.h"
+
 struct Application
 {
 	Application();

@@ -14,5 +14,11 @@ struct InputHandler
 
 public:
 
+	// mouse attributes
+	float lastX = 400;
+	float lastY = 300;
+	bool firstMouse = true;
+	bool isMouseCapturedInWindow = false;
+	bool UIwantsToCaptureMouseInput = true;
 };
 

@@ -35,8 +35,6 @@ bool UIwantsToCaptureMouseInput = true;
 // Window dimensions
 const int WIDTH = 1920, HEIGHT = 1080;
 int downscale = 4;
-GLuint downscalesq = downscale * downscale;
-GLfloat ASPECT = float(WIDTH) / float(HEIGHT);
 
 // cloud model
 float coverageScale = 0.45f;
@@ -186,11 +184,11 @@ int main()
 
     // ==============================================================================================================================================
 
-        // ------------------------------------------------------
-        // Low Frequency Shape Noise
-        // ------------------------------------------------------
+    // ------------------------------------------------------
+    // Low Frequency Shape Noise
+    // ------------------------------------------------------
 
-        // Framebuffer
+    // Framebuffer
     unsigned int shapeNoiseFramebuffer;
     glGenFramebuffers(1, &shapeNoiseFramebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, shapeNoiseFramebuffer);
