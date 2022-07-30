@@ -14,12 +14,12 @@ void main()
 	// Then, uv is (1,0) for the following 4 fragments on the x-axis and (2,0) for the next 4 fragments, and so on. 
 	// This means, that for every fragment in this shader, uv contains the same screen space position for a block of 4x4 consecutive fragments, so
 	// that those 4x4 fragment block can be assigned with the same color from a texture, when uv is used as texture coordinates.
-	vec2 uv = floor(gl_FragCoord.xy / downscaleFactor);	
+	vec2 uv = floor(gl_FragCoord.xy / 4);	
 
 	// convert screen space uv to texture coordinates, so that the uv can be used to sample the quarterResolutionColorbuffer texture. 
 	// Since the resolution for the quarterResolutionColorbuffer was downscaled, the current fullscreen resolution needs to be downscaled too 
 	// in order for the texture coordinates to be valid
-	uv = uv / (resolution / downscaleFactor);
+	uv = uv / (resolution / 4);
 	
 	// Sample a color from the quarterResolutionColorbuffer texture. Since uv is the same for downscaled-many (=4x4) consecutive fragments,
 	// the sampled color will be the same for those fragments (pixelated look if downscaled is too high, e.g. downscaled=16) 

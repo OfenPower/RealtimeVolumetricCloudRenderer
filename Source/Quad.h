@@ -5,7 +5,7 @@
 struct Quad
 {
     Quad();
-    void Initialize(QuadVertexData* vertices);
+    void Initialize(QuadVertexData* vertexData);
 
     // renders a 2D Quad
     void Draw();

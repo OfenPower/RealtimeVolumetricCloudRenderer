@@ -38,6 +38,59 @@ struct VolumetricCloudAtmoshpereRenderer
 		WORLEY,
 		NUM_TEXTURE_3D
 	};
+
+	enum UniformLocation {
+		// volumetric cloud shader
+		INV_VIEW,
+		INV_PROJ,
+		CAM_POS,
+		TIME,
+		RESOLUTION_1,
+		PERLIN_WORLEY,
+		WORLEY,
+		SUN_INTENSITY,
+		SUN_POSITION,
+		COVERAGE_SCALE,
+		CLOUD_COLOR,
+		RAIN_CLOUD_ABSORPTION_GAIN,
+		CLOUD_ATTENUATION_SCALE,
+		AMBIENT_COLOR_SCALE,
+		CLOUD_TYPE,
+		TONEMAPPER_EYE_EXPOSURE,
+		IGNORE_DETAIL_NOISE,
+		ANVIL_BIAS,
+		LOW_FREQUENCY_NOISE_SCALE,
+		HIGH_FREQUENCY_NOISE_SCALE,
+		HIGH_FREQUENCY_NOISE_ERODE_MULTIPLIER,
+		HIGH_FREQUENCY_HEIGHT_TRANSITION_MULTIPLIER,
+		PHASE_ECCENTRICITY,
+		PHASE_SILVER_LINING_INTENSITY,
+		PHASE_SILVER_LINING_SPREAD,
+		CONE_SPREAD_MULTIPLIER,
+		SHADOW_SAMPLE_CONE_SPREAD_MULTIPLIER,
+		POWDERED_SUGAR_EFFECT_MULTIPLIER,
+		MAX_RENDER_DISTANCE,
+		MAX_HORIZONTAL_SAMPLE_COUNT,
+		MAX_VERTICAL_SAMPLE_COUNT,
+		USE_EARLY_EXIT_AT_FULL_OPACITY,
+		USE_BAYER_FILTER,
+		EARTH_RADIUS,
+		VOLUMETRIC_CLOUDS_START_RADIUS,
+		VOLUMETRIC_CLOUDS_END_RADIUS,
+		WIND_DIRECTION,
+		WIND_UPWARD_BIAS,
+		CLOUD_SPEED,
+		CLOUD_TOP_OFFSET,
+		DEBUG_BOOL,
+		DEBUG_FLOAT1,
+		DEBUG_FLOAT2,
+		DEBUG_FLOAT3,
+		// upscale shader
+		RESOLUTION_2,
+		BUFF,
+		// enum count
+		NUM_UNIFORM_LOCATIONS
+	};
 	// -----------------------------------------------------------------------------------------------------
 
 	VolumetricCloudAtmoshpereRenderer();
@@ -47,11 +100,14 @@ struct VolumetricCloudAtmoshpereRenderer
 	void InitializeNoiseFramebuffer();
 	void InitializeQuarterResolutionFramebuffer();
 	void InitializeMainFramebuffer();
+	void InitializeShaderUniformLocations();
+	void InitializeVolumetricCloudAtmosphereShaderUniformLocations();
+	void InitializeUpscaleShaderUniformLocations();
 
 	void ComputeNoiseTextures();
 	void ComputeLowFrequencyPerlinWorleyNoiseTexture();
 	void ComputeHighFrequencyWorleyTexture();
-	
+
 	void Draw();
 
 
@@ -71,6 +127,7 @@ public:
 	unsigned int framebuffer[NUM_FRAMEBUFFER];
 	unsigned int texture2D[NUM_TEXTURE_2D];
 	unsigned int texture3D[NUM_TEXTURE_3D];
+	unsigned int uniformLocation[NUM_UNIFORM_LOCATIONS];
 
 	// cloud model
 	float coverageScale = 0.45f;

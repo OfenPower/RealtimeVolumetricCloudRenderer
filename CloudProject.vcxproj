@@ -151,6 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Quad.cpp" />
     <ClCompile Include="Source\InputHandler.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
@@ -169,6 +170,7 @@
     <ClCompile Include="Source\VolumetricCloudAtmosphereRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Quad.h" />
     <ClInclude Include="Source\InputHandler.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Camera.h" />
@@ -468,6 +470,7 @@
     <ClInclude Include="Source\ImGui\imstb_rectpack.h" />
     <ClInclude Include="Source\ImGui\imstb_textedit.h" />
     <ClInclude Include="Source\ImGui\imstb_truetype.h" />
+    <ClInclude Include="Source\QuadVertexData.h" />
     <ClInclude Include="Source\Shader.h" />
     <ClInclude Include="Source\VolumetricCloudAtmosphereRenderer.h" />
   </ItemGroup>
