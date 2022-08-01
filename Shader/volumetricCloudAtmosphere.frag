@@ -6,7 +6,7 @@ uniform sampler3D worl;			// 3d texture with the high frequency worley noise. Us
 uniform mat4 invView;	// inverse of the view matrix
 uniform mat4 invProj;	// inverse of the projection matrix
 uniform float time;		
-uniform vec2 resolution;	// resolution = vec2(WIDTH/4, HEIGHT/2)	
+uniform vec2 resolution;	// resolution = vec2(WIDTH/4, HEIGHT/4)	
 
 // Camera Position
 uniform vec3 camPos;
