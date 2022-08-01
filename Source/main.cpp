@@ -1,5 +1,4 @@
 
-#include "glad/glad.h"
 #include "glfw/glfw3.h"
 
 #include "Application.h"
@@ -35,6 +34,7 @@ int main()
 	glfwSetCursorPosCallback(window, CursorPosCallback);
 	glfwSetKeyCallback(window, KeyCallback);
 	glfwSetMouseButtonCallback(window, MouseButtonCallback);
+	application->uiRenderer.InstallCallbacks();	// imgui callbacks have to be installed after custom glfw bindings
 
 	// start rendering loop
 	application->Run();

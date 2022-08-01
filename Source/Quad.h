@@ -1,6 +1,6 @@
 #pragma once
 
-#include "QuadVertexData.h"
+struct QuadVertexData;
 
 struct Quad
 {

@@ -3,6 +3,8 @@
 #include "Application.h"
 #include "ComputeShader.h"
 
+#include "glad/glad.h"
+
 #include <iostream>
 
 
@@ -25,8 +27,10 @@ void VolumetricCloudAtmoshpereRenderer::Initialize(Application* app)
     ComputeNoiseTextures();
 
 	// initialize fullscreenquad with quad vertex data
-	fullscreenQuad.Initialize(&quadVertexData);
+    quad.Initialize(&quadVertexData);
 
+    // setup projection matrix, which stays the same
+    projection = glm::perspective(glm::radians(camera.Zoom), (float)app->windowWidth / (float)app->windowHeight, 0.01f, 1000000.0f);
     
 }
 
@@ -75,7 +79,7 @@ void VolumetricCloudAtmoshpereRenderer::InitializeNoiseFramebuffer()
 
     // assign framebuffer to array
     framebuffer[LOW_FREQUENCY_NOISE] = shapeNoiseFramebuffer;
-    texture3D[PERLIN_WORLEY] = perlworltex;
+    texture3D[T_PERLIN_WORLEY] = perlworltex;
 
     // High Frequency Detail Noise Framebuffer
     unsigned int detailNoiseFramebuffer;
@@ -101,7 +105,7 @@ void VolumetricCloudAtmoshpereRenderer::InitializeNoiseFramebuffer()
 
     // assign framebuffer to array
     framebuffer[HIGH_FREQUENCY_NOISE] = detailNoiseFramebuffer;
-    texture3D[WORLEY] = worltex;
+    texture3D[T_WORLEY] = worltex;
 }
 
 void VolumetricCloudAtmoshpereRenderer::InitializeQuarterResolutionFramebuffer()
@@ -170,8 +174,8 @@ void VolumetricCloudAtmoshpereRenderer::InitializeVolumetricCloudAtmosphereShade
     uniformLocation[CAM_POS] = glGetUniformLocation(volumetricCloudAtmosphereShaderId, "camPos");
     uniformLocation[TIME] = glGetUniformLocation(volumetricCloudAtmosphereShaderId, "time");
     uniformLocation[RESOLUTION_1] = glGetUniformLocation(volumetricCloudAtmosphereShaderId, "resolution");
-    uniformLocation[PERLIN_WORLEY] = glGetUniformLocation(volumetricCloudAtmosphereShaderId, "perlworl");
-    uniformLocation[WORLEY] = glGetUniformLocation(volumetricCloudAtmosphereShaderId, "worl");
+    uniformLocation[UL_PERLIN_WORLEY] = glGetUniformLocation(volumetricCloudAtmosphereShaderId, "perlworl");
+    uniformLocation[UL_WORLEY] = glGetUniformLocation(volumetricCloudAtmosphereShaderId, "worl");
     uniformLocation[SUN_INTENSITY] = glGetUniformLocation(volumetricCloudAtmosphereShaderId, "sunIntensity");
     uniformLocation[SUN_POSITION] = glGetUniformLocation(volumetricCloudAtmosphereShaderId, "sunPosition");
     uniformLocation[COVERAGE_SCALE] = glGetUniformLocation(volumetricCloudAtmosphereShaderId, "coverageScale");
@@ -211,8 +215,8 @@ void VolumetricCloudAtmoshpereRenderer::InitializeVolumetricCloudAtmosphereShade
     uniformLocation[DEBUG_FLOAT3] = glGetUniformLocation(volumetricCloudAtmosphereShaderId, "debugFloat3");
 
     // assign texture units
-    glUniform1i(uniformLocation[PERLIN_WORLEY], 0);
-    glUniform1i(uniformLocation[WORLEY], 1);
+    glUniform1i(uniformLocation[UL_PERLIN_WORLEY], 0);
+    glUniform1i(uniformLocation[UL_WORLEY], 1);
 }
 
 void VolumetricCloudAtmoshpereRenderer::InitializeUpscaleShaderUniformLocations()
@@ -240,12 +244,9 @@ void VolumetricCloudAtmoshpereRenderer::ComputeLowFrequencyPerlinWorleyNoiseText
     ComputeShader perlinWorleyShader("../Shader/perlinWorley.comp");
     perlinWorleyShader.use();
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[LOW_FREQUENCY_NOISE]);
-    glBindImageTexture(0, texture3D[PERLIN_WORLEY], 0, GL_TRUE, 0, GL_READ_WRITE, GL_RGBA8);	// layout (rgba8, binding = 0) uniform image3D outVolTex;
-    glActiveTexture(GL_TEXTURE0);                               // TODO: entfernen, macht keinen Sinn
-    glBindTexture(GL_TEXTURE_3D, texture3D[PERLIN_WORLEY]);     // TODO: entfernen, macht keinen Sinn
+    glBindImageTexture(0, texture3D[T_PERLIN_WORLEY], 0, GL_TRUE, 0, GL_READ_WRITE, GL_RGBA8);	// layout (rgba8, binding = 0) uniform image3D outVolTex;
     glDispatchCompute(128, 128, 128);
     glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
-    glBindTexture(GL_TEXTURE_3D, 0);                            // TODO: entfernen, macht keinen Sinn
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
@@ -255,16 +256,160 @@ void VolumetricCloudAtmoshpereRenderer::ComputeHighFrequencyWorleyTexture()
     ComputeShader worleyShader("../Shader/worley.comp");
     worleyShader.use();
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[HIGH_FREQUENCY_NOISE]);
-    glBindImageTexture(0, texture3D[WORLEY], 0, GL_TRUE, 0, GL_READ_WRITE, GL_RGBA8);
-    glActiveTexture(GL_TEXTURE0);           // TODO: entfernen, macht keinen Sinn
-    glBindTexture(GL_TEXTURE_3D, texture3D[WORLEY]);  // TODO: entfernen, macht keinen Sinn
+    glBindImageTexture(0, texture3D[T_WORLEY], 0, GL_TRUE, 0, GL_READ_WRITE, GL_RGBA8);
     glDispatchCompute(32, 32, 32);          
     glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
-    glBindTexture(GL_TEXTURE_3D, 0);        // TODO: entfernen, macht keinen Sinn
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void VolumetricCloudAtmoshpereRenderer::Update(float deltaTime)
+{
 }
 
 void VolumetricCloudAtmoshpereRenderer::Draw()
 {
-    // TODO!
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    float currentFrameTime = (float)glfwGetTime();
+
+    // update camera view matrix
+    glm::mat4 view = camera.GetViewMatrix();
+
+    // =======================================================================================================================================================================
+
+    // Write to quarter resolution downsized buffer (default case)
+    if (!renderDirectlyToFullscreen) {
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[QUARTER_RESOLUTION]);
+        glViewport(0, 0, quarterWindowWidth, quarterWindowHeight);
+    }
+    else {
+        // render to the fullscreen buffer in order to see the performance impact (if desired)
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[MAIN]);
+        glViewport(0, 0, application->windowWidth, application->windowHeight);
+    }
+    
+    // volumetric cloud shader settings
+    shader[VOLUMETRIC_CLOUD_ATMOSPHERE].use();
+    glUniform3fv(uniformLocation[CAM_POS], 1, &camera.Position[0]);
+    glUniformMatrix4fv(uniformLocation[INV_VIEW], 1, GL_FALSE, &glm::inverse(view)[0][0]);
+    glUniformMatrix4fv(uniformLocation[INV_PROJ], 1, GL_FALSE, &glm::inverse(projection)[0][0]);
+    glUniform1f(uniformLocation[TIME], currentFrameTime);
+    // set resolution based on scale settings
+    if (!renderDirectlyToFullscreen) {
+        glUniform2f(uniformLocation[RESOLUTION_1], (float) quarterWindowWidth, (float) quarterWindowHeight);
+    }
+    else {
+        glUniform2f(uniformLocation[RESOLUTION_1], (float) application->windowWidth, (float) application->windowHeight);
+    }
+    // cloud density model
+    glUniform1f(uniformLocation[COVERAGE_SCALE], coverageScale);
+    glUniform1f(uniformLocation[CLOUD_TYPE], cloudType);
+    glUniform1f(uniformLocation[ANVIL_BIAS], anvilBias);
+    glUniform1f(uniformLocation[LOW_FREQUENCY_NOISE_SCALE], lowFrequencyNoiseScale);
+    glUniform1i(uniformLocation[IGNORE_DETAIL_NOISE], ignoreDetailNoise);
+    glUniform1f(uniformLocation[HIGH_FREQUENCY_NOISE_SCALE], highFrequencyNoiseScale);
+    glUniform1f(uniformLocation[HIGH_FREQUENCY_NOISE_ERODE_MULTIPLIER], highFrequencyNoiseErodeMuliplier);
+    glUniform1f(uniformLocation[HIGH_FREQUENCY_HEIGHT_TRANSITION_MULTIPLIER], highFrequencyHeightTransitionMultiplier);
+    // cloud lighting
+    glUniform3fv(uniformLocation[CLOUD_COLOR], 1, &cloudColor[0]);
+    glUniform1f(uniformLocation[RAIN_CLOUD_ABSORPTION_GAIN], rainCloudAbsorptionGain);
+    glUniform1f(uniformLocation[CLOUD_ATTENUATION_SCALE], cloudAttenuationScale);
+    glUniform1f(uniformLocation[PHASE_ECCENTRICITY], phaseEccentricity);
+    glUniform1f(uniformLocation[PHASE_SILVER_LINING_INTENSITY], phaseSilverLiningIntensity);
+    glUniform1f(uniformLocation[PHASE_SILVER_LINING_SPREAD], phaseSilverLiningSpread);
+    glUniform1f(uniformLocation[CONE_SPREAD_MULTIPLIER], coneSpreadMultplier);
+    glUniform1f(uniformLocation[SHADOW_SAMPLE_CONE_SPREAD_MULTIPLIER], shadowSampleConeSpreadMultiplier);
+    glUniform1f(uniformLocation[POWDERED_SUGAR_EFFECT_MULTIPLIER], powderedSugarEffectMultiplier);
+    glUniform1f(uniformLocation[TONEMAPPER_EYE_EXPOSURE], toneMapperEyeExposure);
+    glUniform1f(uniformLocation[AMBIENT_COLOR_SCALE], ambientColorScale);
+    // wind settings
+    // if windDirection is a zero vector, the resulting normalized windDirection is NaN in all vector components. 
+    // If that is the case, just forward a zero vector to the wind direction uniform 
+    glUniform3fv(uniformLocation[WIND_DIRECTION], 1, glm::all(glm::isnan(glm::normalize(windDirection))) ? &glm::vec3(0, 0, 0)[0] : &windDirection[0]);
+    glUniform1f(uniformLocation[WIND_UPWARD_BIAS], windUpwardBias);
+    glUniform1f(uniformLocation[CLOUD_SPEED], cloudSpeed);
+    glUniform1f(uniformLocation[CLOUD_TOP_OFFSET], cloudTopOffset);
+    // raymarch
+    glUniform1f(uniformLocation[MAX_RENDER_DISTANCE], maxRenderDistance);
+    glUniform1f(uniformLocation[MAX_HORIZONTAL_SAMPLE_COUNT], maxHorizontalSampleCount);
+    glUniform1f(uniformLocation[MAX_VERTICAL_SAMPLE_COUNT], maxVerticalSampleCount);
+    glUniform1i(uniformLocation[USE_EARLY_EXIT_AT_FULL_OPACITY], useEarlyExitAtFullOpacity);
+    glUniform1i(uniformLocation[USE_BAYER_FILTER], useBayerFilter);
+    glUniform1f(uniformLocation[EARTH_RADIUS], earthRadius);
+    glUniform1f(uniformLocation[VOLUMETRIC_CLOUDS_START_RADIUS], volumetricCloudsStartRadius);
+    glUniform1f(uniformLocation[VOLUMETRIC_CLOUDS_END_RADIUS], volumetricCloudsEndRadius);
+    // sun settings
+    glUniform1f(uniformLocation[SUN_INTENSITY], sunIntensity);
+    if (moveSunManually) {
+        float sunPitchRadians = glm::radians(sunPitch);
+        constexpr float yaw = (float)glm::radians(90.0);
+        float sunposx = cos(yaw) * cos(sunPitchRadians);
+        float sunposy = sin(sunPitchRadians);
+        float sunposz = sin(yaw) * cos(sunPitchRadians);
+        glUniform3f(uniformLocation[SUN_POSITION], float(sunposx), float(sunposy), float(sunposz));
+    }
+    else {
+        float pitch = (float)glm::radians(180.0 * ((sin(currentFrameTime * 0.05) + 1.0) * 0.5));
+        constexpr float yaw = (float)glm::radians(90.0);
+        float sunposx = cos(yaw) * cos(pitch);
+        float sunposy = sin(pitch);
+        float sunposz = sin(yaw) * cos(pitch);
+        glUniform3f(uniformLocation[SUN_POSITION], float(sunposx), float(sunposy), float(sunposz));
+    }
+    // debug
+    glUniform1i(uniformLocation[DEBUG_BOOL], debugBool);
+    glUniform1f(uniformLocation[DEBUG_FLOAT1], debugFloat);
+    glUniform1f(uniformLocation[DEBUG_FLOAT2], debugFloat2);
+    glUniform1f(uniformLocation[DEBUG_FLOAT3], debugFloat3);
+
+    // bind noise textures and weathermap
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_3D, texture3D[T_PERLIN_WORLEY]);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_3D, texture3D[T_WORLEY]);
+
+    // render to quad
+    quad.Draw();
+
+
+    // =======================================================================================================================================================================
+
+    // render to the fullscreen framebuffer (where upscaling is applied to the quarterResolutionColorbuffer) 
+    if (!renderDirectlyToFullscreen && !renderActualQuarterResolutionBuffer)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[MAIN]);
+        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glViewport(0, 0, application->windowWidth, application->windowHeight);
+
+        shader[UPSCALE].use();
+        glUniform2f(uniformLocation[RESOLUTION_2], (float) application->windowWidth, (float) application->windowHeight);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture2D[QUARTER_RESOLUTION_COLORBUFFER]);
+
+        // render to quad
+        quad.Draw();
+    }
+
+    // =======================================================================================================================================================================
+
+    // render to default (screen) buffer 
+    glDisable(GL_DEPTH_TEST);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    shader[FULLSCREEN_QUAD].use();
+    glActiveTexture(GL_TEXTURE0);
+    if (!renderActualQuarterResolutionBuffer) {
+        glBindTexture(GL_TEXTURE_2D, texture2D[MAIN_COLORBUFFER]);
+    }
+    else {
+        glBindTexture(GL_TEXTURE_2D, texture2D[QUARTER_RESOLUTION_COLORBUFFER]);
+    }
+
+    // render to quad
+    quad.Draw();
 }

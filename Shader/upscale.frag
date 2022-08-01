@@ -1,9 +1,7 @@
 #version 430 core
 
 uniform sampler2D buff;		// subbufertex - the texture which contains the rendered clouds
-
 uniform vec2 resolution;		// (WIDTH, HEIGHT)
-uniform float downscaleFactor;	// factor 4
 
 out vec4 color;
 

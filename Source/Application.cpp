@@ -1,7 +1,7 @@
 #include "Application.h"
 
 #include "glad/glad.h"
-#include "glfw/glfw3.h"
+#include "Camera.h"
 
 #include <iostream>
 
@@ -42,41 +42,65 @@ void Application::Initialize(const int screenWidth, const int screenHeight, cons
     // initialize viewport
     glViewport(0, 0, windowWidth, windowHeight);
 
-    // initialize renderer and input handler
+    // initialize components
     volumetricCloudAtmoshpereRenderer.Initialize(this);
+    inputHandler.Initialize(this);
+    uiRenderer.Initialize(this);
 }
 
 void Application::Run()
 {
-    // main loop
-    // -----------
     float deltaTime = (float)glfwGetTime();      // glfwGetTime() measures time elapsed since GLFW was initialized
     float lastFrameTime = 0.0f;
+
+    float cloudDeltaTime = (float)glfwGetTime();
+    float cloudLastFrameTime = 0.0;
+
+    // main loop
+    // -----------
     while (!glfwWindowShouldClose(mainWindow))
     {
-        // Input Processing
+        // tell UI that new Frame has begun
+        uiRenderer.BeginNewFrame();
+
+        // Process Input
+        //
         inputHandler.ProcessRealtimeInput(mainWindow, deltaTime);
 
-        // Update 
-        // [...]
-
         // Render
-        //volumetricCloudAtmoshpereRenderer.render();
+        //
+        float cloudCurrentFrameTime = (float)glfwGetTime();             // cloud rendering frame time
+        volumetricCloudAtmoshpereRenderer.Draw();
+        cloudDeltaTime = cloudCurrentFrameTime - cloudLastFrameTime;    // cloud rendering frame time
+        cloudLastFrameTime = cloudCurrentFrameTime;                     // cloud rendering frame time
 
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        glfwSwapBuffers(mainWindow);
-        glfwPollEvents();
-
+        DisplayCloudFramerateAndCameraPositionInWindowTitle(cloudDeltaTime);
+        
+        uiRenderer.SetupSettingsWindow();
+        uiRenderer.Draw();
+        
         // per-frame time logic
         float currentFrameTime = (float)glfwGetTime();
         deltaTime = currentFrameTime - lastFrameTime;
         lastFrameTime = currentFrameTime;
 
-        // print elapsed time in ms and camera position to window title
-        char buffer[300];
-        //sprintf_s(buffer, "Elapsed Time: %f ms - Camera Position: (x=%f, y=%f, z=%f)", deltaTime * 1000.0, camera.Position.x, camera.Position.y + earthRadius, camera.Position.z);
-        glfwSetWindowTitle(mainWindow, buffer);
+        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+        glfwSwapBuffers(mainWindow);
+        glfwPollEvents();
     }
+}
+
+void Application::DisplayCloudFramerateAndCameraPositionInWindowTitle(float cloudDeltaTime)
+{
+    char buffer[300];
+    Camera& camera = volumetricCloudAtmoshpereRenderer.camera;
+    float earthRadius = volumetricCloudAtmoshpereRenderer.earthRadius;
+    sprintf_s(buffer, "Elapsed Time: %f ms - Camera Position: (x=%f, y=%f, z=%f)", 
+        cloudDeltaTime * 1000.0,
+        camera.Position.x, 
+        camera.Position.y + earthRadius, 
+        camera.Position.z);
+    glfwSetWindowTitle(mainWindow, buffer);
 }
 
 void Application::FramebufferSizeCallback(GLFWwindow* window, int width, int height)

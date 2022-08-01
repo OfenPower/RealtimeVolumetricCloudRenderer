@@ -1,5 +1,7 @@
 #include "Quad.h"
 
+#include "QuadVertexData.h"
+
 #include "glad/glad.h"
 
 Quad::Quad()

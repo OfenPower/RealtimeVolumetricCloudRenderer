@@ -2,7 +2,7 @@
 
 #include "Camera.h"
 #include "Quad.h"
-
+#include "QuadVertexData.h"
 #include "Shader.h"
 
 #include "glm/glm.hpp"
@@ -34,8 +34,8 @@ struct VolumetricCloudAtmoshpereRenderer
 	};
 
 	enum Texture3DType {
-		PERLIN_WORLEY,
-		WORLEY,
+		T_PERLIN_WORLEY,
+		T_WORLEY,
 		NUM_TEXTURE_3D
 	};
 
@@ -46,8 +46,8 @@ struct VolumetricCloudAtmoshpereRenderer
 		CAM_POS,
 		TIME,
 		RESOLUTION_1,
-		PERLIN_WORLEY,
-		WORLEY,
+		UL_PERLIN_WORLEY,
+		UL_WORLEY,
 		SUN_INTENSITY,
 		SUN_POSITION,
 		COVERAGE_SCALE,
@@ -108,6 +108,7 @@ struct VolumetricCloudAtmoshpereRenderer
 	void ComputeLowFrequencyPerlinWorleyNoiseTexture();
 	void ComputeHighFrequencyWorleyTexture();
 
+	void Update(float deltaTime);
 	void Draw();
 
 
@@ -118,16 +119,24 @@ public:
 	int quarterWindowWidth;
 	int quarterWindowHeight;
 
-	// fullscreen quad
-	Quad fullscreenQuad;
+	// 2D quad to which will be rendered
+	Quad quad;
 	QuadVertexData quadVertexData;
 
+	// camera, view and projection matrix
 	Camera camera;
+	glm::mat4 view;
+	glm::mat4 projection;
+	
+	// arrays für shader, framebuffer, etc.
 	Shader shader[NUM_SHADER];
 	unsigned int framebuffer[NUM_FRAMEBUFFER];
 	unsigned int texture2D[NUM_TEXTURE_2D];
 	unsigned int texture3D[NUM_TEXTURE_3D];
 	unsigned int uniformLocation[NUM_UNIFORM_LOCATIONS];
+
+	// volumetric cloud variables
+	//
 
 	// cloud model
 	float coverageScale = 0.45f;
@@ -152,7 +161,7 @@ public:
 	float toneMapperEyeExposure = 0.8f;
 	// raymarch
 	float maxRenderDistance = 150000.0f;
-	float maxHorizontalSampleCount = 192.0f;
+	float maxHorizontalSampleCount = 128.0f;
 	float maxVerticalSampleCount = 128.0f;
 	bool useEarlyExitAtFullOpacity = true;
 	bool useBayerFilter = true;
