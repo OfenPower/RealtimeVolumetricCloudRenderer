@@ -39,8 +39,7 @@ int main()
 	// start rendering loop
 	application->Run();
 
-	// cleanup
-	glfwTerminate();
+	// end of application
 	delete application;
 
 	return 0;

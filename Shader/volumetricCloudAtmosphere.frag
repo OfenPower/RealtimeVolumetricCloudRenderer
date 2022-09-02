@@ -297,7 +297,7 @@ float getCloudDensity(vec3 p, const bool expensiveSample, const float LOD)
 	float lowFrequencyFBM = lowFrequencyNoises.g * 0.625 + lowFrequencyNoises.b * 0.25 + lowFrequencyNoises.a * 0.125;
 
 	// define the base cloud shape by dilating it with the low frequency FBM made of worley noise
-	float baseCloud = remap(lowFrequencyNoises.r, -(1.0 - lowFrequencyFBM), 1.0, 0.0, 1.0);
+	float baseCloud = remap(lowFrequencyNoises.r, -1.0 + lowFrequencyFBM, 1.0, 0.0, 1.0);
 
 	// get the density-height gradient based on the cloud type. 0.0=stratus, 0.5=stratocumulus, 1.0=cumulus
 	float densityHeightGradient = densityHeightGradient(heightFraction, cloudType);
@@ -443,13 +443,13 @@ vec4 raymarch(const vec3 startPosition, const vec3 endPosition, vec3 raymarchSte
 					vec3 sunColorComponent = pow(sunColor, vec3(sunIntensity));		
 					
 					// calculate the current cloud color in this iteration
-					vec3 cloudColor = vec3(ambientLightColorComponent + cloudColor * sunColorComponent * lightEnergy);
+					vec3 fullCloudColor = vec3(ambientLightColorComponent + cloudColor * sunColorComponent * lightEnergy);
 
 					// Accumulate the cloud result color and result opacity. Equations are based off https://www.willusher.io/webgl/2019/01/13/volume-rendering-with-webgl
 					//
 
 					// Accumulate Color
-					resultCloudColor = resultCloudColor + (1.0 - resultCloudOpacity) * cloudColor * sampledCloudDensity;
+					resultCloudColor = resultCloudColor + (1.0 - resultCloudOpacity) * fullCloudColor * sampledCloudDensity;
 					// Accumulate Opacity
 					resultCloudOpacity = resultCloudOpacity + (1.0 - resultCloudOpacity) * sampledCloudDensity;
 					
@@ -459,7 +459,6 @@ vec4 raymarch(const vec3 startPosition, const vec3 endPosition, vec3 raymarchSte
 						resultCloudOpacity = 1.0;
 						break;
 					}
-					
 				}
 
 				// if sampled cloud density was 0, take a step forward for the next density sample iteration

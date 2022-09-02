@@ -94,6 +94,7 @@ struct VolumetricCloudAtmoshpereRenderer
 	// -----------------------------------------------------------------------------------------------------
 
 	VolumetricCloudAtmoshpereRenderer();
+	~VolumetricCloudAtmoshpereRenderer();
 	void Initialize(Application* app);
 	void InitializeShader();
 	void InitializeFramebuffer();
@@ -167,7 +168,7 @@ public:
 	bool useBayerFilter = true;
 	float earthRadius = 600000.0f;
 	float volumetricCloudsStartRadius = 607000.0f;
-	float volumetricCloudsEndRadius = 633000.0f;
+	float volumetricCloudsEndRadius = 620000.0f;
 	bool renderDirectlyToFullscreen = false;
 	bool renderActualQuarterResolutionBuffer = false;
 	// windsettings

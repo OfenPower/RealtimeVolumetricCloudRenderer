@@ -9,6 +9,7 @@
 struct Application
 {
 	Application();
+	~Application();
 	void Initialize(const int screenWidth, const int screenHeight, const char* title);
 	void Run();
 	void DisplayCloudFramerateAndCameraPositionInWindowTitle(float deltaTime);

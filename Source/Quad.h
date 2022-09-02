@@ -5,6 +5,7 @@ struct QuadVertexData;
 struct Quad
 {
     Quad();
+    ~Quad();
     void Initialize(QuadVertexData* vertexData);
 
     // renders a 2D Quad
@@ -13,5 +14,6 @@ struct Quad
 
 public:
     unsigned int VAO;
+    unsigned int VBO;
     QuadVertexData* quadVertexData;
 };

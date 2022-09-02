@@ -13,6 +13,13 @@ ImGUIRenderer::ImGUIRenderer()
     
 }
 
+ImGUIRenderer::~ImGUIRenderer()
+{
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+}
+
 void ImGUIRenderer::Initialize(Application* app)
 {
     application = app;
@@ -21,7 +28,7 @@ void ImGUIRenderer::Initialize(Application* app)
     
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    io = ImGui::GetIO();
+    io = &ImGui::GetIO();
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(application->mainWindow, false);   // callbacks wont be installed here, they will be installed after custom glfw callbacks in main()
     ImGui_ImplOpenGL3_Init("#version 430");
@@ -39,11 +46,11 @@ void ImGUIRenderer::BeginNewFrame()
     ImGui::NewFrame();
 
     // show mouse and un-capture mouse, when moving over the UI
-    if (io.WantCaptureMouse) {
+    if (io->WantCaptureMouse) {
         inputHandler->isMouseCapturedInWindow = false;
         GLFWwindow* window = application->mainWindow;
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        glfwSetCursorPos(window, io.MousePos.x, io.MousePos.y);
+        glfwSetCursorPos(window, io->MousePos.x, io->MousePos.y);
     }
 }
 

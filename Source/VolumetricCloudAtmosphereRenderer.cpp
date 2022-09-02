@@ -13,6 +13,18 @@ VolumetricCloudAtmoshpereRenderer::VolumetricCloudAtmoshpereRenderer()
 
 }
 
+VolumetricCloudAtmoshpereRenderer::~VolumetricCloudAtmoshpereRenderer()
+{
+    glDeleteFramebuffers(framebuffer[NUM_FRAMEBUFFER], &framebuffer[0]);
+    glDeleteTextures(texture2D[NUM_TEXTURE_2D], &texture2D[0]);
+    glDeleteTextures(texture2D[NUM_TEXTURE_3D], &texture3D[0]);
+
+
+
+
+    //glDeleteVertexArrays(1, &quadVAO);
+}
+
 void VolumetricCloudAtmoshpereRenderer::Initialize(Application* app)
 {
     application = app;

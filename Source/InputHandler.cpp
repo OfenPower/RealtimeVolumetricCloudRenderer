@@ -21,6 +21,10 @@ void InputHandler::KeyCallback(GLFWwindow* window, int key, int scancode, int ac
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
+    if (key == GLFW_KEY_R && action == GLFW_PRESS) {
+        camera->Position = glm::vec3(0, 0, 0);
+        camera->Front = glm::vec3(0, 0, -1);
+    }
 }
 
 void InputHandler::CursorPosCallback(GLFWwindow* window, double xpos, double ypos)

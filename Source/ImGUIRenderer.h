@@ -11,6 +11,7 @@ struct VolumetricCloudAtmoshpereRenderer;
 struct ImGUIRenderer
 {
 	ImGUIRenderer();
+	~ImGUIRenderer();
 	void Initialize(Application* app);
 	void InstallCallbacks();
 	void BeginNewFrame();
@@ -20,7 +21,7 @@ struct ImGUIRenderer
 
 
 public:
-	ImGuiIO io;
+	ImGuiIO* io;
 	Application* application;
 	InputHandler* inputHandler;
 	VolumetricCloudAtmoshpereRenderer* cloudRenderer;

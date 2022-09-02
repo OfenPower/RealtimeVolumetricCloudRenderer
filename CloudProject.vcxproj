@@ -167,7 +167,6 @@
     <ClCompile Include="Source\ImGui\imgui_tables.cpp" />
     <ClCompile Include="Source\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\mainbackup.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
     <ClCompile Include="Source\VolumetricCloudAtmosphereRenderer.cpp" />
   </ItemGroup>

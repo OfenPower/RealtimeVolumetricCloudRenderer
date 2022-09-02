@@ -9,6 +9,11 @@ Application::Application()
 {
 }
 
+Application::~Application()
+{
+    glfwTerminate();
+}
+
 void Application::Initialize(const int screenWidth, const int screenHeight, const char* title)
 {
     windowWidth = screenWidth;
@@ -67,18 +72,19 @@ void Application::Run()
         //
         inputHandler.ProcessRealtimeInput(mainWindow, deltaTime);
 
-        // Render
-        //
+        // Render Volumetric Clouds 
+        // 
         float cloudCurrentFrameTime = (float)glfwGetTime();             // cloud rendering frame time
         volumetricCloudAtmoshpereRenderer.Draw();
         cloudDeltaTime = cloudCurrentFrameTime - cloudLastFrameTime;    // cloud rendering frame time
         cloudLastFrameTime = cloudCurrentFrameTime;                     // cloud rendering frame time
-
         DisplayCloudFramerateAndCameraPositionInWindowTitle(cloudDeltaTime);
         
+        // Render Settings Menu
+        //
         uiRenderer.SetupSettingsWindow();
         uiRenderer.Draw();
-        
+
         // per-frame time logic
         float currentFrameTime = (float)glfwGetTime();
         deltaTime = currentFrameTime - lastFrameTime;

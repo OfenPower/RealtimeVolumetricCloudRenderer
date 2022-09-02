@@ -54,9 +54,6 @@
     <ClCompile Include="Source\Application.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="Source\mainbackup.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="Source\InputHandler.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
